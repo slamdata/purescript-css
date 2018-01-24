@@ -1,15 +1,13 @@
 module CSS.Border where
 
 import Prelude
-
-import Data.Generic (class Generic)
-import Data.Tuple.Nested (tuple3, tuple4)
-
 import CSS.Color (Color)
 import CSS.Property (class Val, Value)
 import CSS.Size (Size, Abs)
 import CSS.String (fromString)
 import CSS.Stylesheet (CSS, key)
+import Data.Generic (class Generic)
+import Data.Tuple (Tuple(Tuple))
 
 newtype Stroke = Stroke Value
 
@@ -49,6 +47,8 @@ outset = Stroke $ fromString "outset"
 
 border :: Stroke -> Size Abs -> Color -> CSS
 border a b c = key (fromString "border") $ tuple3 a b c
+  where
+  tuple3 a b c = Tuple a (Tuple b c)
 
 borderTop :: Stroke -> Size Abs -> Color -> CSS
 borderTop a b c = key (fromString "border-top") $ tuple3 a b c
@@ -67,3 +67,5 @@ borderColor = key $ fromString "border-color"
 
 borderRadius :: forall a. Size a -> Size a -> Size a -> Size a -> CSS
 borderRadius a b c d = key (fromString "border-radius") (tuple4 a b c d)
+  where
+  tuple4 a b c d = Tuple a (Tuple b (Tuple c d))
