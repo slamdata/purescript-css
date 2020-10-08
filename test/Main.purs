@@ -2,14 +2,15 @@ module Test.Main where
 
 import Prelude
 
-import Effect (Effect)
-import Effect.Exception (error, throwException)
-import CSS (Rendered, Path(..), Predicate(..), Refinement(..), Selector(..), FontFaceSrc(..), FontFaceFormat(..), renderedSheet, renderedInline, fromString, selector, block, display, render, borderBox, boxSizing, contentBox, blue, color, body, a, p, px, dashed, border, inlineBlock, red, (?), (&), (|>), (|*), (|+), byId, byClass, (@=), (^=), ($=), (*=), (~=), (|=), hover, fontFaceSrc, fontStyle, deg, zIndex, textOverflow, opacity, transform, transition, easeInOut, ms)
+import CSS (FontFaceFormat(..), FontFaceSrc(..), Path(..), Predicate(..), Refinement(..), Rendered, Selector(..), a, block, blue, body, border, borderBox, boxSizing, byClass, byId, color, contentBox, dashed, deg, display, easeInOut, fontFaceSrc, fontStyle, fromString, hover, inlineBlock, ms, opacity, p, px, red, render, renderedInline, renderedSheet, selector, textOverflow, transform, transition, zIndex, ($=), (&), (*=), (?), (@=), (^=), (|*), (|+), (|=), (|>), (~=))
 import CSS.FontStyle as FontStyle
+import CSS.Refinement (before)
 import CSS.Text.Overflow as TextOverflow
 import CSS.Transform as Transform
 import Data.Maybe (Maybe(..))
 import Data.NonEmpty (singleton)
+import Effect (Effect)
+import Effect.Exception (error, throwException)
 
 example1 :: Rendered
 example1 = render do
@@ -47,7 +48,7 @@ example7 = render do
 
 withSelector :: Rendered
 withSelector = render do
-  a ? do
+  a & before ? do
     color blue
   a & hover ? do
     color red
@@ -158,7 +159,7 @@ main = do
 
   renderedInline example5 `assertEqual` Just "box-sizing: content-box; box-sizing: border-box"
 
-  renderedSheet withSelector `assertEqual` Just "a { color: hsl(240.0, 100.0%, 50.0%) }\na:hover { color: hsl(0.0, 100.0%, 50.0%) }\n"
+  renderedSheet withSelector `assertEqual` Just "a::before { color: hsl(240.0, 100.0%, 50.0%) }\na:hover { color: hsl(0.0, 100.0%, 50.0%) }\n"
   renderedSheet childSelector `assertEqual` Just "p > a { z-index: 9 }\n"
   renderedSheet deepSelector `assertEqual` Just "p a { display: block }\n"
   renderedSheet adjacentSelector `assertEqual` Just "a + a { display: inline-block }\n"
